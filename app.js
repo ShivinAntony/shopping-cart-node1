@@ -15,6 +15,7 @@ var app = express();
 var fileUpload = require('express-fileupload')
 const db = require('./config/connection');
 const { Admin } = require('mongodb');
+var session=require('express-session')
 
 // view engine setup
 app.engine('hbs', hbs.engine({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layout/', partialsDir: __dirname + '/views/partials/' }));
@@ -30,6 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload())
+app.use(session({secret:"Key",cookie:{maxAge:600000}}))
 
 db.connect((err)=>{
   if(err) console.log("Connection Error"+err)
