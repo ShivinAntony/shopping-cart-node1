@@ -1,1 +1,1 @@
-Shopping Caret
+Shopping Cart
