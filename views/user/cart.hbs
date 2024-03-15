@@ -13,14 +13,13 @@
             <tbody>
                 {{#each products}}
                 <tr>
-                    {{#each this.product}}
-                    <td><img style="width: 70px; height: 70px;" src="/product-images/{{this._id}}.jpg" alt=""></td>
-                    <td>{{this.Name}}</td>
-                    {{/each}}
+                    
+                    <td><img style="width: 70px; height: 70px;" src="/product-images/{{this.product._id}}.jpg" alt=""></td>
+                    <td>{{this.product.Name}}</td>
+                    
 
                     <td>
-                        <button class="cart-item-count mr-3 btn-success">-</button>{{this.quantity}}<button
-                            class="cart-item-count ml-3 btn-success">+</button>
+                        <button class="cart-item-count mr-3 btn-success" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)">-</button>{{this.quantity}}<button class="cart-item-count ml-3 btn-success" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)">+</button>
                     </td>
                     <td>
                         <a href="" class="btn btn-danger">Remove</a>
@@ -31,3 +30,20 @@
         </table>
     </div>
 </section>
+
+<script>
+    function changeQuantity(cartId,proId,count){
+      $.ajax({
+        url:'/change-product-quantity',
+        data:{
+            cart:cartId,
+            product:proId,
+            count:count
+        },
+        method:'post',
+        success:(response)=>{
+            alert(response)
+        }
+      })
+  }
+</script>
