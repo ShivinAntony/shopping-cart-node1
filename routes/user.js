@@ -76,9 +76,13 @@ router.get('/add-to-cart/:id', (req, res) => {
 })
 router.post('/change-product-quantity',(req,res,next)=>{
   console.log(req.body)
-  userHelpers.changeProductQuantity(req.body).then(()=>{
-
+  userHelpers.changeProductQuantity(req.body).then((response)=>{
+    res.json(response)
   })
+})
+router.get('/place-order',verifyLogin,async(req,res)=>{
+  let total=await userHelpers.getTotalAmount(req.session.user._id)
+  res.render('user/place-order',{total})
 })
 
 module.exports = router;

@@ -7,19 +7,26 @@
 
                     <th scope="col">Item</th>
                     <th scope="col">Title</th>
+                    <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
                 </tr>
             </thead>
             <tbody>
                 {{#each products}}
                 <tr>
-                    
-                    <td><img style="width: 70px; height: 70px;" src="/product-images/{{this.product._id}}.jpg" alt=""></td>
+
+                    <td><img style="width: 70px; height: 70px;" src="/product-images/{{this.product._id}}.jpg" alt="">
+                    </td>
                     <td>{{this.product.Name}}</td>
-                    
+                    <td>Rs.{{this.product.Price}}</td>
+
 
                     <td>
-                        <button class="cart-item-count mr-3 btn-success" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)">-</button>{{this.quantity}}<button class="cart-item-count ml-3 btn-success" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)">+</button>
+                        <button class="cart-item-count mr-3 btn-success"
+                            onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)">-</button>
+                        <span id="{{this.product._id}}">{{this.quantity}}</span>
+                        <button class="cart-item-count ml-3 btn-success"
+                            onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)">+</button>
                     </td>
                     <td>
                         <a href="" class="btn btn-danger">Remove</a>
@@ -28,22 +35,36 @@
                 {{/each}}
             </tbody>
         </table>
+        <hr>
+        <div class="float-right pr-5">
+        <h5 class="float-left mr-5">TOTAL: Rs.1723434</h5><br>
+        <a href="/place-order" class=" btn btn-success mt-3" style="width: 100%;"><b>Place Order</b></a>
+        </div>
     </div>
 </section>
 
 <script>
-    function changeQuantity(cartId,proId,count){
-      $.ajax({
-        url:'/change-product-quantity',
-        data:{
-            cart:cartId,
-            product:proId,
-            count:count
-        },
-        method:'post',
-        success:(response)=>{
-            alert(response)
-        }
-      })
-  }
+    function changeQuantity(cartId, proId, count) {
+        let quantity=parseInt(document.getElementById(proId).innerHTML)
+        count=parseInt(count)
+        $.ajax({
+            url: '/change-product-quantity',
+            data: {
+                cart: cartId,
+                product: proId,
+                count: count,
+                quantity:quantity
+            },
+            method: 'post',
+            success:(response)=>{
+                if(response.removeProduct){
+                    alert("Product Removed from cart")
+                    location.reload()
+                }else{
+                    document.getElementById(proId).innerHTML=quantity+count
+                }
+                
+            }
+        })
+    }
 </script>
